@@ -6,6 +6,8 @@ Description: Computes exact as well as Hettmansperger and Sheather interpolated
     confidence intervals for population quantiles based on a single sample.
 Depends:
     R (>= 3.3.0)
+Suggests:
+    testthat
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
