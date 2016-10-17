@@ -1,0 +1,9 @@
+Package: quantileCI
+Title: Confidence intervals for population quantiles
+Version: 0.0.0.9000
+Authors@R: person("Michael", "Höhle", email = "hoehle@math.su.se", role = c("aut", "cre"))
+Description: Computes exact as well as Hettmansperger and Sheather interpolated confidence intervals for population quantiles based on a single sample.
+Depends: R (>= 3.3.0)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
