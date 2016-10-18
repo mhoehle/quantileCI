@@ -41,6 +41,6 @@ The interpolation procedure suggested by Hettmansperger
 \references{
 Hettmansperger TP and Sheather SJ (1986), Confidence
   intervals based on interpolated order statistics, Statistics and
-  Probability Letters 4, p. 75-79.
+  Probability Letters, 4, p. 75-79.
 }
 
