@@ -111,11 +111,13 @@ confint_median_hs <- function(x, conf.level=0.95, x_is_sorted=FALSE, interpolate
   ##Exact interval, no interpolation (if requested)
   if (!interpolate) return( c(x[d],x[n-d+1]))
 
-  ##Improved interval using the Hettmansperger & Sheather (1986) method
+  ##Improved interval using the Hettmansperger & Sheather (1986)
+  ##interpolation method of the order statistics
   I <- (conf_level_d - conf.level) / (conf_level_d - conf_level_dp1)
   lambda <- (n-d) * I / (d + (n-2*d)*I)
-  ci_improved <- c((1-lambda)*x[d] + lambda*x[d+1], (1-lambda)*x[n-d+1]+lambda*x[n-d])
+  ci_improved <- c((1-lambda)*x[d]     +  lambda*x[d+1],
+                   (1-lambda)*x[n-d+1] +  lambda*x[n-d])
 
-  #Done, Hettmansperger and Sheather interval
+  #Done, return Hettmansperger and Sheather interval
   return(ci_improved)
 }
