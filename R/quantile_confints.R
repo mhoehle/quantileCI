@@ -44,13 +44,13 @@ quantile_confint_nyblom <- function(x, p, conf.level=0.95, x_is_sorted=FALSE, in
   if (!interpolate) return(x[c(d,e)])
 
   ##See Nyblom paper for the formula
-  lambda <- function(r, beta, q) {
-    pi_r <- dbinom(r-1, prob=q, size=n)
-    pi_rp1 <- dbinom(r, prob=q, size=n)
-    (1 + (r*(1-q)*(pi_rp1 - beta))/( (n-r)*q*(beta - pi_r)) )^(-1)
+  lambda <- function(r, beta, p) {
+    pi_r <- dbinom(r-1, prob=p, size=n)
+    pi_rp1 <- dbinom(r, prob=p, size=n)
+    (1 + (r*(1-p)*(pi_rp1 - beta))/( (n-r)*p*(beta - pi_r)) )^(-1)
   }
   ci_limit <- function(r,beta) {
-    lambda <- lambda(r=r, beta=beta, q=q)
+    lambda <- lambda(r=r, beta=beta, p=p)
     (1-lambda)*x[r] + lambda*x[pmin(r+1,n)]  #can't go beyond n
   }
   ##Return the Nyblom interval

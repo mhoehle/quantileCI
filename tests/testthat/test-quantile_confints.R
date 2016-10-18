@@ -19,3 +19,6 @@ for (p in seq(0,1,length=10)) {
             expect_equal(quantile_confint_so(x=x, p=p, conf.level=0.95),
                          quantile_confint_nyblom(x=x, p=p, conf.level=0.95, interpolate=FALSE)))
 }
+
+quantile_confint_nyblom(x=x, p=p, conf.level=0.95, interpolate=TRUE)
+
