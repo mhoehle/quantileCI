@@ -2,7 +2,7 @@
 #' statistic as suggested in Nyblom (1991)
 #'
 #' @param x vector of observations
-#' @param q quantile of interest
+#' @param p quantile of interest, \eqn{0 \leq p \leq 1}{0 <= p <= 1}
 #' @param conf.level A conf.level * 100% confidence interval is
 #'   computed
 #' @param x_is_sorted Boolean (Default: FALSE) to safe sorting x, if
@@ -24,18 +24,18 @@
 #'   of the confidence interval
 #' @export
 
-quantile_confint_nyblom <- function(x, q, conf.level=0.95, x_is_sorted=FALSE, interpolate=TRUE) {
+quantile_confint_nyblom <- function(x, p, conf.level=0.95, x_is_sorted=FALSE, interpolate=TRUE) {
   ##Define variables needed later
   if (!x_is_sorted) { x <-sort(x) }
   n <- length(x)
   alpha <- 1-conf.level
 
   ##Find d
-  (d <- n - qbinom(1-alpha/2, size=n, prob=(1-q)))
+  (d <- n - qbinom(1-alpha/2, size=n, prob=(1-p)))
   ##Find e
-  xq <- qbinom(alpha/2, size=n, prob=(1-q))
-  subtract_one <- (xq > 0) & (pbinom(xq, size=n, prob=(1-q)) > alpha/2)
-  (e <- n - xq + subtract_one)
+  x_p <- qbinom(alpha/2, size=n, prob=(1-p))
+  subtract_one <- (x_p > 0) & (pbinom(x_p, size=n, prob=(1-p)) > alpha/2)
+  (e <- n - x_p + subtract_one)
 
   d <- max(d,1)
   e <- min(e,n)
@@ -79,7 +79,7 @@ quantile_confint_nyblom <- function(x, q, conf.level=0.95, x_is_sorted=FALSE, in
 #'   statistic.
 #' @references Hettmansperger TP and Sheather SJ (1986), Confidence
 #'   intervals based on interpolated order statistics, Statistics and
-#'   Probability Letters 4, p. 75-79.
+#'   Probability Letters, 4, p. 75-79.
 #' @importFrom stats dbinom pbinom qbinom
 #' @return A vector of length two containing the lower and upper limit
 #'   of the confidence interval

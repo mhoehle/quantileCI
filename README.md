@@ -16,6 +16,6 @@ x <- rnorm(25)
 #Compute 25% quantile
 quantile(x, prob=0.25, type=3)
 #Compute confidence interval for it (two methods)
-quantileCI::quantile_confint_nyblom(x=x, q=0.25, conf.level=0.95)
-quantileCI::quantile_confint_nyblom(x=x, q=0.25, conf.level=0.95, interpolate=FALSE)
+quantileCI::quantile_confint_nyblom(x=x, p=0.25, conf.level=0.95)
+quantileCI::quantile_confint_nyblom(x=x, p=0.25, conf.level=0.95, interpolate=FALSE)
 `
