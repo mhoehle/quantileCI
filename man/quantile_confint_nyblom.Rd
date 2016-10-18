@@ -40,6 +40,11 @@ The interpolation procedure suggested by Nyblom (1992),
   which extends work by Hettmansperger and Sheather (1986) for the
   median is applied to the order statistic.
 }
+\examples{
+set.seed(123)
+x <- rnorm(25)
+quantile_confint_nyblom(x=x, p=0.8, conf.level=0.95, interpolate=TRUE)
+}
 \references{
 Nyblom J, Note in interpolated order statistics,
   Statistics and Probability Letters 14, p. 129-131.

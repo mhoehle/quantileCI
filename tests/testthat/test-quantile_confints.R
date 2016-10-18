@@ -20,5 +20,4 @@ for (p in seq(0,1,length=10)) {
                          quantile_confint_nyblom(x=x, p=p, conf.level=0.95, interpolate=FALSE)))
 }
 
-quantile_confint_nyblom(x=x, p=p, conf.level=0.95, interpolate=TRUE)
 

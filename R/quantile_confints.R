@@ -17,6 +17,10 @@
 #' @details The interpolation procedure suggested by Nyblom (1992),
 #'   which extends work by Hettmansperger and Sheather (1986) for the
 #'   median is applied to the order statistic.
+#' @examples
+#' set.seed(123)
+#' x <- rnorm(25)
+#' quantile_confint_nyblom(x=x, p=0.8, conf.level=0.95, interpolate=TRUE)
 #' @references Nyblom J, Note in interpolated order statistics,
 #'   Statistics and Probability Letters 14, p. 129-131.
 #' @importFrom stats dbinom pbinom qbinom
@@ -120,4 +124,23 @@ confint_median_hs <- function(x, conf.level=0.95, x_is_sorted=FALSE, interpolate
 
   #Done, return Hettmansperger and Sheather interval
   return(ci_improved)
+}
+
+#' Confidence interval method for a given quantile based on the basic
+#' bootstrap and using the percentile method.
+#'
+#' @param x vector of observations
+#' @param p quantile of interest
+#' @param conf.level A conf.level * 100% confidence interval is
+#'   computed
+#' @param R number of replications to use in the bootstrap (Default: 999)
+#' @details Basic bootstrap with the confidence interval computed based on the percentile method.
+#' @importFrom stats quantile
+#' @return A vector of length two containing the lower and upper limit
+#'   of the confidence interval
+#' @export
+#'
+quantile_confint_boot <- function(x, p, conf.level=0.95, R=999) {
+  b <- boot::boot(x, statistic=function(data, idx) quantile(x[idx],prob=q,type=3), R=R)
+  boot::boot.ci(b, conf=conf.level, type="perc")$percent[4:5]
 }
