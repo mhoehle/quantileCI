@@ -123,7 +123,7 @@ quantile_confint_nyblom <- function(x, p, conf.level=0.95, x_is_sorted=FALSE, in
   d <- d + (isTRUE(all.equal(pbinom(d, prob=p, size=n),alpha/2)))
   e <- qbinom(1-alpha/2, size=n, prob=p) + 1
 
-  ##Safeguard
+  ##Safeguard the output
   d <- max(d,1)
   e <- min(e,n)
 
