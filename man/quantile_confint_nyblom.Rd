@@ -6,7 +6,7 @@
 statistic as suggested in Nyblom (1991)}
 \usage{
 quantile_confint_nyblom(x, p, conf.level = 0.95, x_is_sorted = FALSE,
-  interpolate = TRUE)
+  interpolate = TRUE, fix_interval = TRUE)
 }
 \arguments{
 \item{x}{vector of observations}
@@ -26,6 +26,10 @@ then this is just the standard exact procedure based on the order
 statistics. Note: This procedure is conservative (i.e. coverage
 is usualler larger than the nominal conf.level and hence the
 interval is actually in general too large).}
+
+\item{fix_interval}{Boolean (Default: TRUE) For the case with no
+interpolation, try to extend interval upwards if coverage is too
+little.}
 }
 \value{
 A vector of length two containing the lower and upper limit
