@@ -14,8 +14,8 @@ quantile_confint_so <-function(x, p,conf.level=0.95, x_is_sorted=FALSE){
 set.seed(123)
 x <- rnorm(10)
 
-for (p in seq(0,1,length=10)) {
-  test_that("Manual summing up probs matching qbinom quantile",
+for (p in seq(0.1,1,length=10)) {
+  test_that("Comparing summing up probs with qbinom quantile",
             expect_equal(quantile_confint_so(x=x, p=p, conf.level=0.95),
                          quantile_confint_nyblom(x=x, p=p, conf.level=0.95, interpolate=FALSE,fix_interval=FALSE)))
 }
@@ -31,9 +31,15 @@ for (p in seq(0,1,length=10)) {
 ##   }
 ## }
 
-x <- rnorm(11)
-quantile_confint_nyblom(x=x, p=0.5, conf.level=1-alpha, interpolate=TRUE)
-median_confint_hs(x=x, conf.level=1-alpha, interpolate=TRUE)
+##Check procedures for the median
+set.seed(123)
+for (i in 1:10) {
+  x <- rnorm(rpois(1,10*i))
+  test_that("Equality of Nyblom procedure to Hettmansperger & Sheather procedure for median",
+            expect_equal(
+              quantile_confint_nyblom(x=x, p=0.5, conf.level=0.95, interpolate=TRUE),
+              median_confint_hs(x=x, conf.level=0.95, interpolate=TRUE)))
+}
 
 #Sandbox test zone
 if (FALSE) {
@@ -81,5 +87,64 @@ if (FALSE) {
 
   pbinom(e-1, size=n, prob=p) - pbinom(d-1, size=n, prob=p)
 
+  ######################################################################
+  ## Compare with Table 1 of Nyblom (1992)
+  ######################################################################
+  set.seed(123); n<- 11; x <- sort(rnorm(n)) ; p <- 0.25 ; conf.level=0.9
+  (ci <- quantile_confint_nyblom(x, p=p, conf.level=conf.level, interpolate=FALSE))
+  (idx <- pmatch(ci, x))
+
+  #Tail probabilities
+  (p_tail_16 <- c(pbinom(1 - 1, prob=0.25, size=n),   1-pbinom(6-1, prob=0.25, size=n)))
+  1-sum(p_tail_16)
+
+  (p_tail_25 <- c(pbinom(2 - 1, prob=0.25, size=n),   1-pbinom(5-1, prob=0.25, size=n)))
+  1-sum(p_tail_25)
+
+  #Compute lower limit
+  lambda <- 0.1496291638
+  q_truth <- qnorm(p)
+  (1-lambda) * x[1] + lambda*x[2]
+
+  quantile_confint_nyblom(x, p=p, conf.level=0.9)
+
+  ##Selection of methods to use
+  quantile_confints <- function(x, p, conf.level, x_is_sorted=FALSE, ...) {
+    if (!x_is_sorted) { x <- sort(x)}
+
+    ##Compute the various confidence intervals as above
+    res <- data.frame(
+                      EnvStats_asymp=as.numeric(EnvStats::eqnpar(x=x, p=p, ci=TRUE, ci.method="normal.approx",approx.conf.level=conf.level)$interval$limits),
+                      nyblom_interp=quantileCI::quantile_confint_nyblom(x=x, p=p, conf.level=conf.level,x_is_sorted=TRUE,interpolate=TRUE)
+                      )
+    if (p == 0.5) {
+      res$hs_interp = quantileCI::median_confint_hs(x=x,  conf.level=conf.level,x_is_sorted=TRUE,interpolate=TRUE)
+    }
+    return(res)
+  }
+
+  simulate.coverage_qci <- function(n=n,p=p,conf.level=0.9, nSim=1e4, ...) {
+    ##Windows users: change to below lapply function or use snow.
+    lapplyFun <- function(x, mc.cores=NA, ...) lapply(x, ...) #parallel::mclapply
+    ##lapplyFun <- parallel::mclapply
+
+    sims <- dplyr::bind_rows(
+      lapplyFun(1L:nSim, function(i) {
+        quantileCI::qci_coverage_one_sim(qci_fun=quantile_confints, n=n,p=p,conf.level=conf.level,...)
+      }, mc.cores = parallel::detectCores() - 1)
+    ) %>% summarise_each(funs(mean))
+    return(sims)
+  }
+
+  simulate.coverage_qci(n=n, p=p, conf.level=0.9, nSim=25e3)
+  simulate.coverage_qci(n=25, p=0.8, conf.level=0.95, nSim=25e3)
+
+  simulate.coverage_qci(n=101, p=0.9, rfunc=rt, qfunc=qt, conf.level=0.95, df=1,nSim=1e5)
+
+
+  ## library(formattable)
+##   formattable(data.frame(coverage=as.numeric(t(y))), list(
+##                                                        area(col = c(coverage) ~ normalize_bar("pink", max(coverage)))
+## ))
 
 }

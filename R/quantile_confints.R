@@ -1,3 +1,23 @@
+#' Confidence interval method for a given quantile based on the basic
+#' bootstrap and using the percentile method.
+#'
+#' @param x vector of observations
+#' @param p quantile of interest
+#' @param conf.level A conf.level * 100% confidence interval is
+#'   computed
+#' @param R number of replications to use in the bootstrap (Default: 999)
+#' @param type Type of empirical quantile estimation procedure, @seealso the \code{\link{quantile}} function.
+#' @details Basic bootstrap with the confidence interval computed based on the percentile method.
+#' @importFrom stats quantile
+#' @return A vector of length two containing the lower and upper limit
+#'   of the confidence interval
+#' @export
+#'
+quantile_confint_boot <- function(x, p, conf.level=0.95, R=999, type = 7) {
+  b <- boot::boot(x, statistic=function(data, idx) quantile(x[idx],prob=p,type=type), R=R)
+  boot::boot.ci(b, conf=conf.level, type="perc")$percent[4:5]
+}
+
 #' Confidence interval method for the median by the method of
 #' Hettmansperger & #' Sheather (1991)
 #'
@@ -59,25 +79,6 @@ median_confint_hs <- function(x, conf.level=0.95, x_is_sorted=FALSE, interpolate
 
   #Done, return Hettmansperger and Sheather interval
   return(ci_improved)
-}
-
-#' Confidence interval method for a given quantile based on the basic
-#' bootstrap and using the percentile method.
-#'
-#' @param x vector of observations
-#' @param p quantile of interest
-#' @param conf.level A conf.level * 100% confidence interval is
-#'   computed
-#' @param R number of replications to use in the bootstrap (Default: 999)
-#' @details Basic bootstrap with the confidence interval computed based on the percentile method.
-#' @importFrom stats quantile
-#' @return A vector of length two containing the lower and upper limit
-#'   of the confidence interval
-#' @export
-#'
-quantile_confint_boot <- function(x, p, conf.level=0.95, R=999) {
-  b <- boot::boot(x, statistic=function(data, idx) quantile(x[idx],prob=p,type=3), R=R)
-  boot::boot.ci(b, conf=conf.level, type="perc")$percent[4:5]
 }
 
 #' Quantile confidence interval based on interpolating the order
@@ -145,15 +146,16 @@ quantile_confint_nyblom <- function(x, p, conf.level=0.95, x_is_sorted=FALSE, in
 
   ##See Nyblom (1992) paper for the formula
   lambda <- function(r, beta, p) {
-    pi_r <- dbinom(r-1, prob=p, size=n)
-    pi_rp1 <- dbinom(r, prob=p, size=n)
+    pi_r   <- pbinom(r-1, prob=p, size=n)
+    pi_rp1 <- pbinom(r, prob=p, size=n)
+
     (1 + (r*(1-p)*(pi_rp1 - beta))/( (n-r)*p*(beta - pi_r)) )^(-1)
   }
   ci_limit <- function(r,beta) {
     lambda <- lambda(r=r, beta=beta, p=p)
-    (1-lambda)*x[r] + lambda*x[pmin(r+1,n)]  #can't go beyond n
+    (1-lambda) * x[r] + lambda * x[pmin(r+1,n)]  #can't go beyond n
   }
 
-  ##Return the Nyblom interval
-  return(c(ci_limit(d, beta=alpha/2),   ci_limit(e, beta=1-alpha/2)))
+  ##Return the Nyblom interval (or at least my interpretation of it)
+  return(c(ci_limit(d, beta=alpha/2),   ci_limit(e-1, beta=1-alpha/2)))
 }

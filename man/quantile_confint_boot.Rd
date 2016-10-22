@@ -5,7 +5,7 @@
 \title{Confidence interval method for a given quantile based on the basic
 bootstrap and using the percentile method.}
 \usage{
-quantile_confint_boot(x, p, conf.level = 0.95, R = 999)
+quantile_confint_boot(x, p, conf.level = 0.95, R = 999, type = 7)
 }
 \arguments{
 \item{x}{vector of observations}
@@ -16,6 +16,8 @@ quantile_confint_boot(x, p, conf.level = 0.95, R = 999)
 computed}
 
 \item{R}{number of replications to use in the bootstrap (Default: 999)}
+
+\item{type}{Type of empirical quantile estimation procedure, @seealso the \code{\link{quantile}} function.}
 }
 \value{
 A vector of length two containing the lower and upper limit
