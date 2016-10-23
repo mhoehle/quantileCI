@@ -142,9 +142,94 @@ if (FALSE) {
   simulate.coverage_qci(n=101, p=0.9, rfunc=rt, qfunc=qt, conf.level=0.95, df=1,nSim=1e5)
 
 
-  ## library(formattable)
-##   formattable(data.frame(coverage=as.numeric(t(y))), list(
-##                                                        area(col = c(coverage) ~ normalize_bar("pink", max(coverage)))
-## ))
+  ##Numbers from the blog post
+  set.seed(as.integer(charToRaw("R")))
+  n <- 25 ; x <- sort(rnorm(n)) ; p <- 0.8 ; alpha <- 0.1
+  ##Numbers from Nyblom
+  set.seed(123); n<- 11; x <- sort(rnorm(n)) ; p <- 0.25 ; alpha <- 0.1
+  x_p <- qnorm(p)
+  hat_x_p <- quantile(x, prob=p, type=1)
+  ci1 <- quantileCI::quantile_confint_nyblom(x, p=p, interpolate=FALSE, conf.level=1-alpha)
+  ci2 <- quantileCI::quantile_confint_nyblom(x, p=p, interpolate=TRUE, conf.level=1-alpha)
 
+  idx <- pmatch(ci1, x)
+
+  ##Compute coverage for smoothed interval by Monte Carlo sampling (this might be slow)
+  ##Try to do this using numerical integration instead.
+  d <- 17 ; e <- 24
+  lambda1 <- 0.09313647
+  lambda2 <- 0.4259059
+  ##See Nyblom (1992) paper for the formula
+  lambda <- function(r, beta, p) {
+    pi_r   <- pbinom(r-1, prob=p, size=n)
+    pi_rp1 <- pbinom(r, prob=p, size=n)
+
+    (1 + (r*(1-p)*(pi_rp1 - beta))/( (n-r)*p*(beta - pi_r)) )^(-1)
+  }
+  d <- idx[1]
+  e <- idx[2]
+  lambda1 <- lambda(r=d, beta=alpha/2, p=p)
+  lambda2 <- lambda(r=e-1, beta=1-alpha/2, p=p)
+
+
+  tails  <- replicate(1e6, {
+    y <- sort(rnorm(n))
+    ##These numbers are computed by the Nyblom procedure. Computed manually
+    ##from the functions defined inside the quantile_confint_nyblom function.
+    c((1-lambda1)*y[d] + lambda1*y[d+1] > x_p, (1-lambda2)*y[e-1] + lambda2*y[e] <= x_p)
+
+  })
+  dim(tails)
+  rowMeans(tails)
+  cov2 <- 1 - sum(rowMeans(tails))
+  cov2
+
+  ## ##Using eqn (2) of Nyblom (1992)
+  ## p_wsum <- function(z, r,lambda, F, f, Finv) {
+  ##   f_to_int <- function(y) F(z-lambda*y/(1-lambda))^r * (1-F(z+y))^(n-r-1)*f(z+y)
+
+  ##   ##Cut into small intervals to integrate in order to handle full support
+  ##   breaks <- Finv(seq(F(0),1,length=10))
+  ##   int_parts <- sapply(2:length(breaks), function(i) {
+  ##     integrate( f_to_int, lower=breaks[i-1], upper=breaks[i])$value
+  ##   })
+
+  ##   ##integrate( f_to_int, lower=breaks[i-1], upper=breaks[i])$value
+  ##   ##dbinom(r+1-1, size=n, prob=p) - n*choose(n-1,r)*sum(int_parts)
+  ##   dbinom(r+1-1, size=n, prob=p) - n*choose(n-1,r)*integrate( f_to_int, lower=0, upper=Inf)$value
+  ## }
+
+  ######################################################################
+  ##Compute coverage numerically!
+  ######################################################################
+
+  ##Tail probs of the weighted sum, i.e. compute
+  ##  P( (1-\lambda) x_{(r)} + lambda * x_{(r+1)} > xi_p)
+  p_wsum <- function(xi_p, r,lambda, F, f, Finv) {
+    ##Function giving the PMF of z = (1-\lambda) x_{(r)} + lambda * x_{(r+1)}
+    f_z <- function(z) {
+      f_to_int <- function(xr,z) {
+        xrp1 <- (z - (1-lambda)*xr)/lambda
+        ##consistency check: (1-lambda)*xr + (lambda)*xrp1
+        ##See https://en.wikipedia.org/wiki/Order_statistic for density
+        exp(lfactorial(n) - lfactorial(r-1) - lfactorial(n - (r+1))) *
+          F(xr)^(r-1) * (1-F(xrp1))^(n-r-1)*f(xr)*f(xrp1)
+      }
+      one <- function(z) {
+        integrate( f_to_int, lower=-Inf, upper=z, z=z)$value
+      }
+      #xr_grid <- seq(-5,z[1],length=1000)
+      #plot(xr_grid, f_to_int(xr_grid, z=z[1]))
+      sapply(z, one)
+    }
+
+    #f_z(c(0.1,0.2))
+    #y <- seq(0,10,length=1000)
+    #plot(y, f_z(y),type="l")
+
+    integrate(f_z, lower=x_p,upper=Inf)$value
+  }
+  #Doesn't work yet. Todotodo!
+  p_wsum( x_p, r=d, lambda=lambda1, F=pnorm, f=dnorm, Finv=qnorm)
+  p_wsum( x_p, r=e-1, lambda=lambda2, F=pnorm, f=dnorm, Finv=qnorm)
 }
