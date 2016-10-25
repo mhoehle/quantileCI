@@ -184,52 +184,31 @@ if (FALSE) {
   cov2 <- 1 - sum(rowMeans(tails))
   cov2
 
-  ## ##Using eqn (2) of Nyblom (1992)
-  ## p_wsum <- function(z, r,lambda, F, f, Finv) {
-  ##   f_to_int <- function(y) F(z-lambda*y/(1-lambda))^r * (1-F(z+y))^(n-r-1)*f(z+y)
-
-  ##   ##Cut into small intervals to integrate in order to handle full support
-  ##   breaks <- Finv(seq(F(0),1,length=10))
-  ##   int_parts <- sapply(2:length(breaks), function(i) {
-  ##     integrate( f_to_int, lower=breaks[i-1], upper=breaks[i])$value
-  ##   })
-
-  ##   ##integrate( f_to_int, lower=breaks[i-1], upper=breaks[i])$value
-  ##   ##dbinom(r+1-1, size=n, prob=p) - n*choose(n-1,r)*sum(int_parts)
-  ##   dbinom(r+1-1, size=n, prob=p) - n*choose(n-1,r)*integrate( f_to_int, lower=0, upper=Inf)$value
-  ## }
-
   ######################################################################
-  ##Compute coverage numerically!
+  ##Compute coverage numerically! NOT WORKING ATM!
   ######################################################################
 
   ##Tail probs of the weighted sum, i.e. compute
   ##  P( (1-\lambda) x_{(r)} + lambda * x_{(r+1)} > xi_p)
-  p_wsum <- function(xi_p, r,lambda, F, f, Finv) {
+  p_wsum <- function(xi_p, r,lambda, F, f) {
     ##Function giving the PMF of z = (1-\lambda) x_{(r)} + lambda * x_{(r+1)}
     f_z <- function(z) {
       f_to_int <- function(xr,z) {
         xrp1 <- (z - (1-lambda)*xr)/lambda
         ##consistency check: (1-lambda)*xr + (lambda)*xrp1
         ##See https://en.wikipedia.org/wiki/Order_statistic for density
-        exp(lfactorial(n) - lfactorial(r-1) - lfactorial(n - (r+1))) *
-          F(xr)^(r-1) * (1-F(xrp1))^(n-r-1)*f(xr)*f(xrp1)
+        (xrp1 > xr) * exp(lfactorial(n) - lfactorial(r-1) - lfactorial(n - r -1)) * F(xr)^(r-1) * (1-F(xrp1))^(n-r-1)*f(xr)*f(xrp1)
+        ##(xrp1 > xr) * exp(lfactorial(n) - lfactorial(r-1) - lfactorial(n - r -1) + (r-1)*log(F(xr)) + (n-r-1)*log((1-F(xrp1))) + log(f(xr)) + log(f(xrp1)))
       }
       one <- function(z) {
         integrate( f_to_int, lower=-Inf, upper=z, z=z)$value
       }
-      #xr_grid <- seq(-5,z[1],length=1000)
-      #plot(xr_grid, f_to_int(xr_grid, z=z[1]))
       sapply(z, one)
     }
-
-    #f_z(c(0.1,0.2))
-    #y <- seq(0,10,length=1000)
-    #plot(y, f_z(y),type="l")
-
-    integrate(f_z, lower=x_p,upper=Inf)$value
+    #Calculate P(z >= x_p) by numerical integration
+    integrate(f_z, lower=x_p,upper=10)$value
   }
-  #Doesn't work yet. Todotodo!
-  p_wsum( x_p, r=d, lambda=lambda1, F=pnorm, f=dnorm, Finv=qnorm)
-  p_wsum( x_p, r=e-1, lambda=lambda2, F=pnorm, f=dnorm, Finv=qnorm)
+  #Get the two tail probabilities for the procedure
+  p_wsum( x_p, r=d, lambda=lambda1,   F=pnorm, f=dnorm)
+  p_wsum( x_p, r=e-1, lambda=lambda2, F=pnorm, f=dnorm)
 }
