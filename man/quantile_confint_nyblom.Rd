@@ -2,7 +2,7 @@
 % Please edit documentation in R/quantile_confints.R
 \name{quantile_confint_nyblom}
 \alias{quantile_confint_nyblom}
-\title{Quantile confidence interval based on interpolating the order
+\title{Two-sided quantile confidence interval based on interpolating the order
 statistic as suggested in Nyblom (1991)}
 \usage{
 quantile_confint_nyblom(x, p, conf.level = 0.95, x_is_sorted = FALSE,
@@ -36,7 +36,7 @@ A vector of length two containing the lower and upper limit
   of the confidence interval
 }
 \description{
-Quantile confidence interval based on interpolating the order
+Two-sided quantile confidence interval based on interpolating the order
 statistic as suggested in Nyblom (1991)
 }
 \details{
@@ -53,4 +53,3 @@ quantile_confint_nyblom(x=x, p=0.8, conf.level=0.95, interpolate=TRUE)
 Nyblom J, Note in interpolated order statistics,
   Statistics and Probability Letters 14, p. 129-131.
 }
-
