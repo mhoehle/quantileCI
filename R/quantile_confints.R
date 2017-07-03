@@ -159,3 +159,33 @@ quantile_confint_nyblom <- function(x, p, conf.level=0.95, x_is_sorted=FALSE, in
   ##Return the Nyblom interval (or at least my interpretation of it)
   return(c(ci_limit(d, beta=alpha/2),   ci_limit(e-1, beta=1-alpha/2)))
 }
+
+#' Standard exact two-sided quantile confidence interval based on the
+#' binomial distribution
+#'
+#' @param x vector of observations
+#' @param p quantile of interest, \eqn{0 \leq p \leq 1}{0 <= p <= 1}
+#' @param conf.level A \code{conf.level} * 100% confidence interval is
+#'   computed
+#' @param x_is_sorted Boolean (Default: FALSE) to safe sorting x, if
+#'   it is already sorted. This is merely for speed reasons in
+#'   situations where it is more efficient to only sort x once.
+#' @param fix_interval Boolean (Default: TRUE) For the case with no
+#'   interpolation, try to extend interval upwards if coverage is too
+#'   little.
+#' @details This function is a pure call-through to the Nyblom function
+#'   with \code{interpolate=FALSE}.
+#' @examples
+#' set.seed(123)
+#' x <- rnorm(25)
+#' quantile_confint_exact(x=x, p=0.8, conf.level=0.95)
+#' @references Nyblom J, Note in interpolated order statistics,
+#'   Statistics and Probability Letters 14, p. 129-131.
+#' @importFrom stats dbinom pbinom qbinom
+#' @return A vector of length two containing the lower and upper limit
+#'   of the confidence interval
+#' @export
+#'
+quantile_confint_exact <- function(x, p, conf.level=0.95, x_is_sorted=FALSE, fix_interval=TRUE) {
+  quantile_confint_nyblom(x=x, p=p, conf.level=conf.level, x_is_sorted=x_is_sorted, fix_interval=fix_interval, interpolate=FALSE)
+}
