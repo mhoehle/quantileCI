@@ -2,7 +2,8 @@
 % Please edit documentation in R/quantile_confints.R
 \name{quantile_confint_exact}
 \alias{quantile_confint_exact}
-\title{Standard exact two-sided quantile confidence interval based on the binomial distribution}
+\title{Standard exact two-sided quantile confidence interval based on the
+binomial distribution}
 \usage{
 quantile_confint_exact(x, p, conf.level = 0.95, x_is_sorted = FALSE,
   fix_interval = TRUE)
@@ -28,7 +29,8 @@ A vector of length two containing the lower and upper limit
   of the confidence interval
 }
 \description{
-Standard exact two-sided quantile confidence interval based on the binomial distribution
+Standard exact two-sided quantile confidence interval based on the
+binomial distribution
 }
 \details{
 This function is a pure call-through to the Nyblom function
