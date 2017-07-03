@@ -21,7 +21,7 @@ computed}
 }
 \value{
 A vector of length two containing the lower and upper limit
-  of the confidence interval
+  of the two-sided confidence interval.
 }
 \description{
 Confidence interval method for a given quantile based on the basic
@@ -30,4 +30,3 @@ bootstrap and using the percentile method.
 \details{
 Basic bootstrap with the confidence interval computed based on the percentile method.
 }
-

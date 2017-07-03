@@ -2,7 +2,7 @@
 % Please edit documentation in R/quantile_confints.R
 \name{median_confint_hs}
 \alias{median_confint_hs}
-\title{Confidence interval method for the median by the method of
+\title{Two-sided confidence interval method for the median by the method of
 Hettmansperger & #' Sheather (1991)}
 \usage{
 median_confint_hs(x, conf.level = 0.95, x_is_sorted = FALSE,
@@ -30,7 +30,7 @@ A vector of length two containing the lower and upper limit
   of the confidence interval
 }
 \description{
-Confidence interval method for the median by the method of
+Two-sided confidence interval method for the median by the method of
 Hettmansperger & #' Sheather (1991)
 }
 \details{
@@ -43,4 +43,3 @@ Hettmansperger TP and Sheather SJ (1986), Confidence
   intervals based on interpolated order statistics, Statistics and
   Probability Letters, 4, p. 75-79.
 }
-

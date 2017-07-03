@@ -10,7 +10,7 @@
 #' @details Basic bootstrap with the confidence interval computed based on the percentile method.
 #' @importFrom stats quantile
 #' @return A vector of length two containing the lower and upper limit
-#'   of the confidence interval
+#'   of the two-sided confidence interval.
 #' @export
 #'
 quantile_confint_boot <- function(x, p, conf.level=0.95, R=999, type = 7) {
@@ -18,7 +18,7 @@ quantile_confint_boot <- function(x, p, conf.level=0.95, R=999, type = 7) {
   boot::boot.ci(b, conf=conf.level, type="perc")$percent[4:5]
 }
 
-#' Confidence interval method for the median by the method of
+#' Two-sided confidence interval method for the median by the method of
 #' Hettmansperger & #' Sheather (1991)
 #'
 #' @param x vector of observations
@@ -81,7 +81,7 @@ median_confint_hs <- function(x, conf.level=0.95, x_is_sorted=FALSE, interpolate
   return(ci_improved)
 }
 
-#' Quantile confidence interval based on interpolating the order
+#' Two-sided quantile confidence interval based on interpolating the order
 #' statistic as suggested in Nyblom (1991)
 #'
 #' @param x vector of observations

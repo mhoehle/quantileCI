@@ -35,4 +35,3 @@ A vector of Booleans of length (no. methods) stating if
 Computing the coverage of different confidence interval methods for
 quantiles by Monte Carlo integration.
 }
-

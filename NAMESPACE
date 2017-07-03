@@ -3,6 +3,7 @@
 export(median_confint_hs)
 export(qci_coverage_one_sim)
 export(quantile_confint_boot)
+export(quantile_confint_exact)
 export(quantile_confint_nyblom)
 importFrom(stats,dbinom)
 importFrom(stats,pbinom)
