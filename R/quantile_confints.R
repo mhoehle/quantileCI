@@ -187,5 +187,5 @@ quantile_confint_nyblom <- function(x, p, conf.level=0.95, x_is_sorted=FALSE, in
 #' @export
 #'
 quantile_confint_exact <- function(x, p, conf.level=0.95, x_is_sorted=FALSE, fix_interval=TRUE) {
-  quantile_confint_nyblom(x=x, p=p, conf.level=conf.level, x_is_sorted=x_is_sorted, fix_interval=fix_interal, interpolate=FALSE)
+  quantile_confint_nyblom(x=x, p=p, conf.level=conf.level, x_is_sorted=x_is_sorted, fix_interval=fix_interval, interpolate=FALSE)
 }
