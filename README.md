@@ -12,10 +12,24 @@ Here is a minimal working example on how to use the package once it is
 installed:
 
 ```
+    require(quantileCI)
     x <- rnorm(25)
-    #Compute 25% quantile
-    quantile(x, prob=0.25, type=3)
+    #Compute 25% quantile as inverse of ECDF (i.e. type=1)
+    quantile(x, prob=0.25, type=1)
     #Compute confidence interval for it (two methods)
+    quantileCI::quantile_confint_exact(x=x, p=0.25, conf.level=0.95)
     quantileCI::quantile_confint_nyblom(x=x, p=0.25, conf.level=0.95)
-    quantileCI::quantile_confint_nyblom(x=x, p=0.25, conf.level=0.95, interpolate=FALSE)
+```
+
+...and here is the package applied to some actual data, i.e. monitoring data from the Flint Water System. Altogether, we want a 90% CI such that the CI consists of two one-sided tests each done at the 5% significance level.
+
+```
+    require(quantileCI)
+    data(flint)
+    #Compute type=5 quantile as in https://www.youtube.com/watch?v=9pql00zr700
+    quantile(flint$lead, probs=0.9, type=5)
+    ##Compute type=1
+    quantile(flint$lead, probs=0.9, type=1)
+    ##Compute corresponding non-parametric 90% CI
+    quantileCI::quantile_confint_exact(flint$lead, p=0.9, conf.level=0.9)
 ```
