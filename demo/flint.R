@@ -27,7 +27,7 @@ ecdf(flint$lead[!flint$exclude])(c(12,13))
 quantile(flint$lead, probs=0.9, type=1)
 quantile(flint$lead[!flint$exclude], probs=0.9, type=1)
 
-##Sample according e-CFR §141.80   General requirements.
+##Sample according e-CFR paragraph 141.80 "General requirements".
 idx <- 0.9*nrow(flint)
 sort(flint %$% lead )[idx]
 sort(flint %$% lead)[c(63,64)]
@@ -50,7 +50,7 @@ sapply(1:9, function(i) {
 })
 
 ##Check min-max (this is the same for all methods. But this
-##doesn't match with the description in the paper by Hyndman & Yan?
+##doesn't match with the description in the paper by Hyndman & Yan (1996)?
 sapply(1:9, function(i) {
   structure(flint %$% lead %>% quantile(probs=c(0,1),type=i),names=paste0("y",c(0,100),"%_",i))
 })
