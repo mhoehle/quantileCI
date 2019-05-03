@@ -5,8 +5,8 @@
 \title{Computing the coverage of different confidence interval methods for
 quantiles by Monte Carlo integration.}
 \usage{
-qci_coverage_one_sim(qci_fun, n, rfunc = rnorm, qfunc = qnorm, p = 0.5,
-  conf.level = 0.95, ...)
+qci_coverage_one_sim(qci_fun, n, rfunc = rnorm, qfunc = qnorm,
+  p = 0.5, conf.level = 0.95, ...)
 }
 \arguments{
 \item{qci_fun}{Function which given n, p and conf.level

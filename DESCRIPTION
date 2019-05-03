@@ -7,10 +7,10 @@ Description: Computes exact as well as Hettmansperger and Sheather interpolated
 Imports:
     boot
 Depends:
-    R (>= 3.3.0)
+    R (>= 3.3.0), units
 Suggests:
     testthat
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0
