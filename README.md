@@ -21,7 +21,7 @@ installed:
     quantileCI::quantile_confint_nyblom(x=x, p=0.25, conf.level=0.95)
 ```
 
-...and here is the package applied to some actual data, i.e. monitoring data from the Flint Water System. Altogether, we want a 90% CI such that the CI consists of two one-sided tests each done at the 5% significance level.
+...and here is the package applied to some actual data, i.e. monitoring data from the [Flint Water System](https://staff.math.su.se/hoehle/blog/2017/06/18/quantiles.html). Altogether, we want a 90% CI such that the CI consists of two one-sided tests each done at the 5% significance level.
 
 ```
     require(quantileCI)
@@ -33,3 +33,5 @@ installed:
     ##Compute corresponding non-parametric 90% CI
     quantileCI::quantile_confint_exact(flint$lead, p=0.9, conf.level=0.9)
 ```
+
+A more comprehensive treatment of the package is available as part of the blog post [Better confidence intervals for quantiles](https://staff.math.su.se/hoehle/blog/2016/10/23/quantileCI.html).
