@@ -14,14 +14,14 @@ devtools::install_github("hoehleatsu/quantileCI")
 
 If you have problems installing from sources: package binaries are also available from my [r-universe](https://hoehleatsu.r-universe.dev) and can be installed using:
 
-`
+```
 options(repos = c(
     hoehleatsu = 'https://hoehleatsu.r-universe.dev',
     CRAN = 'https://cloud.r-project.org'))
 
 # Install some packages
 install.packages('quantileCI')
-`
+```
 
 ## Examples
 Here is a minimal working example on how to use the package once it is installed:
