@@ -5,20 +5,27 @@
 \title{Two-sided quantile confidence interval based on interpolating the order
 statistic as suggested in Nyblom (1991)}
 \usage{
-quantile_confint_nyblom(x, p, conf.level = 0.95, x_is_sorted = FALSE,
-  interpolate = TRUE, fix_interval = TRUE)
+quantile_confint_nyblom(
+  x,
+  p,
+  conf.level = 0.95,
+  x_is_sorted = FALSE,
+  interpolate = TRUE,
+  fix_interval = TRUE
+)
 }
 \arguments{
 \item{x}{vector of observations}
 
 \item{p}{quantile of interest, \eqn{0 \leq p \leq 1}{0 <= p <= 1}}
 
-\item{conf.level}{A conf.level * 100% confidence interval is
+\item{conf.level}{A conf.level * 100\% confidence interval is
 computed}
 
-\item{x_is_sorted}{Boolean (Default: FALSE) to safe sorting x, if
-it is already sorted. This is merely for speed reasons in
-situations where it is more efficient to only sort x once.}
+\item{x_is_sorted}{Boolean (Default: FALSE) indicating if \code{x}
+is already sorted and, hence, it is not necessary to sort it again.
+This is merely for speed reasons in situations where it is more efficient
+to only sort x once.}
 
 \item{interpolate}{Boolean (Default: TRUE) stating whether to
 interpolate the order statistics. If no interpolation is selected

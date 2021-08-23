@@ -3,7 +3,7 @@
 #'
 #' @param x vector of observations
 #' @param p quantile of interest
-#' @param conf.level A conf.level * 100% confidence interval is
+#' @param conf.level A conf.level * 100\% confidence interval is
 #'   computed
 #' @param R number of replications to use in the bootstrap (Default: 999)
 #' @param type Type of empirical quantile estimation procedure, @seealso the \code{\link{quantile}} function.
@@ -11,6 +11,10 @@
 #' @importFrom stats quantile
 #' @return A vector of length two containing the lower and upper limit
 #'   of the two-sided confidence interval.
+#' @examples
+#' set.seed(123)
+#' x <- rnorm(25)
+#' quantile_confint_boot(x=x, p=0.8, conf.level=0.95, R=999)
 #' @export
 #'
 quantile_confint_boot <- function(x, p, conf.level=0.95, R=999, type = 7) {
@@ -19,10 +23,10 @@ quantile_confint_boot <- function(x, p, conf.level=0.95, R=999, type = 7) {
 }
 
 #' Two-sided confidence interval method for the median by the method of
-#' Hettmansperger & #' Sheather (1991)
+#' Hettmansperger & Sheather (1991)
 #'
 #' @param x vector of observations
-#' @param conf.level A conf.level * 100% confidence interval is
+#' @param conf.level A conf.level * 100\% confidence interval is
 #'   computed
 #' @param x_is_sorted Boolean (Default: FALSE) to safe sorting x, if
 #'   it is already sorted. This is merely for speed reasons in
@@ -42,6 +46,10 @@ quantile_confint_boot <- function(x, p, conf.level=0.95, R=999, type = 7) {
 #' @importFrom stats dbinom pbinom qbinom
 #' @return A vector of length two containing the lower and upper limit
 #'   of the confidence interval
+#' @examples
+#' set.seed(123)
+#' x <- rnorm(25)
+#' median_confint_hs(x=x, conf.level=0.95, interpolate=TRUE)
 #' @export
 #'
 median_confint_hs <- function(x, conf.level=0.95, x_is_sorted=FALSE, interpolate=TRUE) {
@@ -86,11 +94,12 @@ median_confint_hs <- function(x, conf.level=0.95, x_is_sorted=FALSE, interpolate
 #'
 #' @param x vector of observations
 #' @param p quantile of interest, \eqn{0 \leq p \leq 1}{0 <= p <= 1}
-#' @param conf.level A conf.level * 100% confidence interval is
+#' @param conf.level A conf.level * 100\% confidence interval is
 #'   computed
-#' @param x_is_sorted Boolean (Default: FALSE) to safe sorting x, if
-#'   it is already sorted. This is merely for speed reasons in
-#'   situations where it is more efficient to only sort x once.
+#' @param x_is_sorted Boolean (Default: FALSE) indicating if \code{x}
+#'   is already sorted and, hence, it is not necessary to sort it again.
+#'   This is merely for speed reasons in situations where it is more efficient
+#'   to only sort x once.
 #' @param interpolate Boolean (Default: TRUE) stating whether to
 #'   interpolate the order statistics. If no interpolation is selected
 #'   then this is just the standard exact procedure based on the order
@@ -165,7 +174,7 @@ quantile_confint_nyblom <- function(x, p, conf.level=0.95, x_is_sorted=FALSE, in
 #'
 #' @param x vector of observations
 #' @param p quantile of interest, \eqn{0 \leq p \leq 1}{0 <= p <= 1}
-#' @param conf.level A \code{conf.level} * 100% confidence interval is
+#' @param conf.level A \code{conf.level} * 100\% confidence interval is
 #'   computed
 #' @param x_is_sorted Boolean (Default: FALSE) to safe sorting x, if
 #'   it is already sorted. This is merely for speed reasons in

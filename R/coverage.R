@@ -9,12 +9,40 @@
 #' @param rfunc Function for generating the samples
 #' @param qfunc Quantile function for computing the true quantile
 #' @param p The quantile of interest 0 <= p <= 1
-#' @param conf.level conf.level * 100% two-sided confidence intervals
+#' @param conf.level conf.level * 100\% two-sided confidence intervals
 #'   are computed
 #' @param \dots Additional arguments passed to \code{rfunc} and \code{qfunc}
 #' @return A vector of Booleans of length (no. methods) stating if
 #'   each method contains the true value or not
 #' @importFrom stats qnorm rnorm
+#' @examples
+#' ##Function to compute different methods on same x.
+#' quantile_confints <- function(x, p, conf.level, x_is_sorted=FALSE) {
+#'   if (!x_is_sorted) { x <- sort(x)}
+#'
+#'   ##Compute the various confidence intervals as above
+#'   res <- data.frame(
+#'     nyblom_exact=quantileCI::quantile_confint_nyblom(x=x, p=p, conf.level=conf.level,
+#'                                                  x_is_sorted=TRUE, interpolate=FALSE),
+#'     nyblom_interp=quantileCI::quantile_confint_nyblom(x=x, p=p, conf.level=conf.level,
+#'                                                  x_is_sorted=TRUE, interpolate=TRUE),
+#'     boot=quantileCI::quantile_confint_boot(x, p=p, conf.level=conf.level, R=999)
+#'   )
+#'   if (p == 0.5) {
+#'     res$hs_interp = quantileCI::median_confint_hs(x=x, conf.level=conf.level,
+#'                                                  x_is_sorted=TRUE, interpolate=TRUE)
+#'   }
+#'   return(res)
+#' }
+#'
+#' ## One run of the simulation function
+#' quantileCI::qci_coverage_one_sim(qci_fun=quantile_confints, n=100,p=0.5,conf.level=0.95)
+#'
+#' ## Several runs, calculate row means to get coverage by sampling
+#' res <- sapply(1L:10L, function(i) {
+#'   quantileCI::qci_coverage_one_sim(qci_fun=quantile_confints, n=100,p=0.5,conf.level=0.95)
+#' })
+#' res
 #' @export
 #'
 qci_coverage_one_sim <- function(qci_fun, n, rfunc=rnorm, qfunc=qnorm, p=0.5, conf.level=0.95, ...) {

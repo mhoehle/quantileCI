@@ -3,15 +3,19 @@
 \name{median_confint_hs}
 \alias{median_confint_hs}
 \title{Two-sided confidence interval method for the median by the method of
-Hettmansperger & #' Sheather (1991)}
+Hettmansperger & Sheather (1991)}
 \usage{
-median_confint_hs(x, conf.level = 0.95, x_is_sorted = FALSE,
-  interpolate = TRUE)
+median_confint_hs(
+  x,
+  conf.level = 0.95,
+  x_is_sorted = FALSE,
+  interpolate = TRUE
+)
 }
 \arguments{
 \item{x}{vector of observations}
 
-\item{conf.level}{A conf.level * 100% confidence interval is
+\item{conf.level}{A conf.level * 100\% confidence interval is
 computed}
 
 \item{x_is_sorted}{Boolean (Default: FALSE) to safe sorting x, if
@@ -31,12 +35,17 @@ A vector of length two containing the lower and upper limit
 }
 \description{
 Two-sided confidence interval method for the median by the method of
-Hettmansperger & #' Sheather (1991)
+Hettmansperger & Sheather (1991)
 }
 \details{
 The interpolation procedure suggested by Hettmansperger
   and Sheather (1986) for the median is applied to the order
   statistic.
+}
+\examples{
+set.seed(123)
+x <- rnorm(25)
+median_confint_hs(x=x, conf.level=0.95, interpolate=TRUE)
 }
 \references{
 Hettmansperger TP and Sheather SJ (1986), Confidence

@@ -5,8 +5,15 @@
 \title{Computing the coverage of different confidence interval methods for
 quantiles by Monte Carlo integration.}
 \usage{
-qci_coverage_one_sim(qci_fun, n, rfunc = rnorm, qfunc = qnorm,
-  p = 0.5, conf.level = 0.95, ...)
+qci_coverage_one_sim(
+  qci_fun,
+  n,
+  rfunc = rnorm,
+  qfunc = qnorm,
+  p = 0.5,
+  conf.level = 0.95,
+  ...
+)
 }
 \arguments{
 \item{qci_fun}{Function which given n, p and conf.level
@@ -22,7 +29,7 @@ and upper bound of each confidence interval method.}
 
 \item{p}{The quantile of interest 0 <= p <= 1}
 
-\item{conf.level}{conf.level * 100% two-sided confidence intervals
+\item{conf.level}{conf.level * 100\% two-sided confidence intervals
 are computed}
 
 \item{\dots}{Additional arguments passed to \code{rfunc} and \code{qfunc}}
@@ -34,4 +41,33 @@ A vector of Booleans of length (no. methods) stating if
 \description{
 Computing the coverage of different confidence interval methods for
 quantiles by Monte Carlo integration.
+}
+\examples{
+##Function to compute different methods on same x.
+quantile_confints <- function(x, p, conf.level, x_is_sorted=FALSE) {
+  if (!x_is_sorted) { x <- sort(x)}
+
+  ##Compute the various confidence intervals as above
+  res <- data.frame(
+    nyblom_exact=quantileCI::quantile_confint_nyblom(x=x, p=p, conf.level=conf.level,
+                                                 x_is_sorted=TRUE, interpolate=FALSE),
+    nyblom_interp=quantileCI::quantile_confint_nyblom(x=x, p=p, conf.level=conf.level,
+                                                 x_is_sorted=TRUE, interpolate=TRUE),
+    boot=quantileCI::quantile_confint_boot(x, p=p, conf.level=conf.level, R=999)
+  )
+  if (p == 0.5) {
+    res$hs_interp = quantileCI::median_confint_hs(x=x, conf.level=conf.level,
+                                                 x_is_sorted=TRUE, interpolate=TRUE)
+  }
+  return(res)
+}
+
+## One run of the simulation function
+quantileCI::qci_coverage_one_sim(qci_fun=quantile_confints, n=100,p=0.5,conf.level=0.95)
+
+## Several runs, calculate row means to get coverage by sampling
+res <- sapply(1L:10L, function(i) {
+  quantileCI::qci_coverage_one_sim(qci_fun=quantile_confints, n=100,p=0.5,conf.level=0.95)
+})
+res
 }

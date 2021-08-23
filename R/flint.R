@@ -2,7 +2,7 @@
 #'
 #'@description The data correspond to the original January as well as the revised June version of the 2015 "Lead and Copper Report and Consumer Notice of Lead Result" report.
 #' Data are taken from the sources stated below, not the original report. Note that a lead level of zero
-#' means below the detection limit.
+#' means that the measurement was below the detection limit.
 #'
 #' @name flint
 #' @docType data
@@ -11,12 +11,13 @@
 #'   \item{lead}{The measured lead concentration in the tap water in parts per billion (ppb = mg/L) as now also made explicit using the \code{units} package.}
 #'   \item{exclude}{Logical indicating if the observations was removed by the authorities or not. In total two observations were removed as explained in the references.}
 #' }
-#' @references Langkjær-Bain, R. (2017), The murky tale of Flint's deceptive water data. Significance, 14: 16–21. \url{http://onlinelibrary.wiley.com/doi/10.1111/j.1740-9713.2017.01016.x/full}.
+#' @references Langkjær-Bain, R. (2017), The murky tale of Flint's deceptive water data. Significance, 14: 16–21. \url{https://rss.onlinelibrary.wiley.com/doi/full/10.1111/j.1740-9713.2017.01016.x}.
 #'
-#'Quantiles and the Flint water crisis (2017), Wicklin, R, \url{http://blogs.sas.com/content/iml/2017/05/17/quantiles-flint-water-crisis.html}
+#' Quantiles and the Flint water crisis (2017), Wicklin, R, \url{http://blogs.sas.com/content/iml/2017/05/17/quantiles-flint-water-crisis.html}
 #'
 #' Youtube video by Michigan Radio explaining the computation of the quantile \url{https://www.youtube.com/watch?v=9pql00zr700}
 #'
+#' Beware the Argument: The Flint Water Crisis and Quantiles (2016), Höhle M, \url{https://staff.math.su.se/hoehle/blog/2017/06/18/quantiles.html}
 #' @usage data(flint)
 #' @import units
 #' @keywords data

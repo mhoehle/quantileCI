@@ -5,15 +5,20 @@
 \title{Standard exact two-sided quantile confidence interval based on the
 binomial distribution}
 \usage{
-quantile_confint_exact(x, p, conf.level = 0.95, x_is_sorted = FALSE,
-  fix_interval = TRUE)
+quantile_confint_exact(
+  x,
+  p,
+  conf.level = 0.95,
+  x_is_sorted = FALSE,
+  fix_interval = TRUE
+)
 }
 \arguments{
 \item{x}{vector of observations}
 
 \item{p}{quantile of interest, \eqn{0 \leq p \leq 1}{0 <= p <= 1}}
 
-\item{conf.level}{A \code{conf.level} * 100% confidence interval is
+\item{conf.level}{A \code{conf.level} * 100\% confidence interval is
 computed}
 
 \item{x_is_sorted}{Boolean (Default: FALSE) to safe sorting x, if

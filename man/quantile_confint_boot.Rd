@@ -12,7 +12,7 @@ quantile_confint_boot(x, p, conf.level = 0.95, R = 999, type = 7)
 
 \item{p}{quantile of interest}
 
-\item{conf.level}{A conf.level * 100% confidence interval is
+\item{conf.level}{A conf.level * 100\% confidence interval is
 computed}
 
 \item{R}{number of replications to use in the bootstrap (Default: 999)}
@@ -29,4 +29,9 @@ bootstrap and using the percentile method.
 }
 \details{
 Basic bootstrap with the confidence interval computed based on the percentile method.
+}
+\examples{
+set.seed(123)
+x <- rnorm(25)
+quantile_confint_boot(x=x, p=0.8, conf.level=0.95, R=999)
 }
