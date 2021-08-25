@@ -1,0 +1,70 @@
+---
+title: "get-started"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{get-started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Installation
+
+The package is available from [GitHub](https://github.com/hoehleatsu/quantileCI), [R-universe](https://hoehleatsu.r-universe.dev/ui#builds) or CRAN.
+
+Once installed the package needs to be loaded:
+```{r setup}
+library(quantileCI)
+```
+
+## Minimal working example
+
+A very simple example to compute two different 95% confidence intervals for the 25th percentile based on a sample of size 25 from a standard normal distribution. The true value is `qnorm(0.25)`=`r qnorm(0.25)`.
+
+```{r}
+x <- rnorm(25)
+#Compute 25% quantile of the sample as inverse of ECDF (i.e. type=1)
+quantile(x, prob=0.25, type=1)
+#Compute confidence interval for it (two methods)
+quantileCI::quantile_confint_exact(x=x, p=0.25, conf.level=0.95)
+quantileCI::quantile_confint_nyblom(x=x, p=0.25, conf.level=0.95)
+```
+
+## Flint Water Monitoring
+
+In this example we look at the use of quantile as part of the water monitoring in the city of Fling. For details see the blog post [Beware the Argument: The Flint Water Crisis and Quantiles](https://staff.math.su.se/hoehle/blog/2017/06/18/quantiles.html).
+
+```{r}
+# Load Flint data, see blog post for details
+data(flint)
+#Compute type=5 quantile as in https://www.youtube.com/watch?v=9pql00zr700
+quantile(flint$lead, probs=0.9, type=5)
+##Compute type=1
+quantile(flint$lead, probs=0.9, type=1)
+##Compute corresponding non-parametric 90% CI
+quantileCI::quantile_confint_exact(flint$lead, p=0.9, conf.level=0.9)
+```
+
+## Coverage
+
+The `qci_coverage_one_sim` function can be used to investigate the coverage of the confidence interval method using simulation. Below a small example showing that the exact method is too conservative, i.e. the coverage is larger than the nominal level. This means that the intervals wider than necessary.
+
+```{r}
+# Investigate coverage of the exact CIs
+quantile_confints <- function(x, p, conf.level, x_is_sorted=FALSE) {
+  if (!x_is_sorted) { x <- sort(x)}
+  data.frame(exact=quantile_confint_exact(x=x, p=p, conf.level=conf.level))
+}
+
+# Coverage is above the nominal 90%  
+set.seed(123)
+sim <- unlist(replicate(1000,qci_coverage_one_sim(quantile_confints, n=nrow(flint), rfunc=rnorm, qfunc=qnorm, p=0.9, conf.level=0.9)))
+mean(sim)
+```
+
